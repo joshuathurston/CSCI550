@@ -1,0 +1,58 @@
+threads
+-Responsiveness
+  ex. multiple button presses at once
+-resource sharing
+-economy
+-scalability
+
+a thread is basically a state of a program execution with its own code data files stack...
+ 
+multi threaded has it's own pc register stack... code, data and files tend to be shared.
+  ex. client-server model thread will help because you can listen for new ports being used while another thread handles the execution...  
+
+serial vs parallel
+serial- things that have to be back to back
+parallel- programs that can be run in any order.
+
+concurrent vs parallel
+(Amdahl's law) S, Portion of program that is serial, N, Number of processing cores
+
+hard parts about parallel
+-Identifying tasks
+-balance "Is it worth it."
+-data splitting "is it capable to split up.
+-data dependency "basically makes operations serial"
+-testing and debugging
+-excited to get started
+
+thread models
+-one-to-many
+  kernal thread dedicated to system calls for all user threads
+  whole process has to block other users
+-one-to-one
+  one user thread to one kernal thread
+  creates a lot of overhead when there ends up being a lot of system calls
+-many-to-many
+  uses a mutiplexer of sorts to overcome both problems with the previous two
+-two-level model
+  two level model combines many-to-many and one-to-one "detached thread"
+
+thread libraries
+---
+we are using an api for creating and managing threads
+c and c++ has imbedded threads.
+
+three main libraries
+-POSIX Pthreads
+-Windows Threads
+-Java Threads
+
+POSIX threads
+--POSIX standard (IEEE1003.1c)
+
+in this class we are doing Explicit threads
+  Pretty much do everything from creation to management to destruction.
+
+thread code examples....
+--- main.c---
+

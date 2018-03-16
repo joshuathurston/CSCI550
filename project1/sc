@@ -1,0 +1,70 @@
+#!/bin/bash
+
+#author: Joshua David Edward Thurston
+#date: 9-8-17
+#version: 1.2
+#notes: Project executable must be labeled proj followed by a number "ex proj1"
+#       Every '.in' test must have an '.out' test with the same name
+#       All tests must be in the folder called tests in project folder
+#       V1.2: can now use a parameter to do individual tests using either a number or custom name
+#brief: script for theory projects to compare text in and out tests
+
+sourceFile=($(ls | egrep '^proj[1-9]$'))
+
+[[ -z $sourceFile ]] && echo "Executable file does not exist" && exit 1
+
+infiles=($(ls tests/*.in))
+outfiles=($(ls tests/*.out))
+
+re1='^[0-9]$'
+re2='^[0-9][0-9]$'
+
+if [ $# != 0 ]
+then
+  if [[ $1 =~ $re1 ]] || [[ $1 =~ $re2 ]]
+  then
+    if [[ $1 =~ $re1 ]]
+    then
+      cInFile=$(printf "tests/t0$1.in")
+      cOutFile=$(printf "tests/t0$1.out")
+    else
+      cInFile=$(printf "tests/t$1.in")
+      cOutFile=$(printf "tests/t$1.out")
+    fi 
+  else
+    cInFile=$(printf "tests/$1.in")
+    cOutFile=$(printf "tests/$1.out")
+  fi
+
+  echo "test: $cInFile : $cOutFile"
+  test1=$(./$sourceFile < $cInFile)
+  test1ref=$(cat $cOutFile)
+  if [ "$test1" == "$test1ref" ]
+  then
+    echo "Passed"
+  else
+    echo "Failed"
+    echo "----------               ----------"
+    echo "-Expected-               - Actual -"
+    echo "----------               ----------"
+    printf "%-20.20s     %-20.20s\n" "$test1" "$test1ref"
+  fi
+else
+  for i in "${!infiles[@]}"
+  do
+    echo "test: ${infiles[$i]} : ${outfiles[$i]}"
+    test1=$(./$sourceFile < ${infiles[$i]})
+    test1ref=$(cat ${outfiles[$i]})
+    if [ "$test1" == "$test1ref" ]
+    then
+      echo "Passed"
+    else
+      echo "Failed"
+      echo "----------               ----------"
+      echo "-Expected-               - Actual -"
+      echo "----------               ----------"
+      printf "%-20.20s     %-20.20s\n" "$test1" "$test1ref"
+   
+    fi
+  done
+fi
